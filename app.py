@@ -18,12 +18,51 @@ HTML_FORM = '''
         <title>Загрузка файлов</title>
     </head>
     <body>
-        <h1>Загрузка файлов</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit" value="Загрузить">
-        </form>
-        <p><a href="/list">Список файлов</></p>
+        <div class="app">
+            <h1>Приветствую</h1>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <h3>Загрузка файлов</h3>
+                <input type="file" name="file" >
+                <input type="submit" value="Загрузить" >
+            </form>
+            <p><a href="/list">Список файлов</a></p>
+            <form action="/files/">
+                <h3>Скачивание файла</h3>
+                <input type="text" name="path" placeholder="Имя файла" required>
+                <button type="submit">Скачать</button>
+                <br />
+            </form>
+            <small>Введите в формате: YYYY-mm-dd/название файла</small>
+        </div>
+        
+        <style>
+            body {
+                display: grid;
+                align-content: start;
+                justify-items: center;
+                margin-top: 80px;
+            }
+            
+            .app {
+                width: max-content;
+                border: 1px solid gray;
+                padding: 44px 32px;
+                border-radius: 8px;
+                box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.1);
+                display: grid;
+                align-content: center;
+            }
+            
+            form {
+                border: 1px solid black;
+                border-radius: 4px;
+                width: 100%;
+            }
+            
+            h1 {
+                justify-self: center;
+            }
+        </style>
     </body>
     </html>
 '''
@@ -81,8 +120,10 @@ def list_files():
             
     return jsonify({'files': files_list, 'count': len(files_list)})
 
-@app.route('/files/<path:filename>')
-def download_file(filename):
+@app.route('/files/')
+def download_file():
+    filename = request.args.get('path')
+    print(f'Получено значение: {filename}')
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     
     if not os.path.exists(filepath):
