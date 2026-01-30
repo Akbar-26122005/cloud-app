@@ -1,5 +1,8 @@
 FROM python:3.12.3-slim
 
+RUN mkdir -p /app/data
+VOLUME ["/storage"]
+
 WORKDIR /app
 
 COPY requirements.txt .
